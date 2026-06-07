@@ -21,7 +21,7 @@ public class Park {
         }
 
         public void printAttractionInfo() {
-            // Внутренний класс может легко брать имя парка (parkName) у своего «родителя»!
+
             System.out.println("Парк: " + parkName);
             System.out.println("Аттракцион: " + name);
             System.out.println("Время работы: " + workingHours);
