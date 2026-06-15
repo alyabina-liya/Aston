@@ -13,13 +13,13 @@ public class Main {
             int result = sumArray(array);
             System.out.println("Сумма элементов массива = " + result);
 
-        } catch (MyArraySizeException e) {
+        } catch (MyArraySizeException exception) {
             System.out.println("Ошибка размера массива:");
-            System.out.println(e.getMessage());
+            System.out.println(exception.getMessage());
 
-        } catch (MyArrayDataException e) {
+        } catch (MyArrayDataException exception) {
             System.out.println("Ошибка данных массива:");
-            System.out.println(e.getMessage());
+            System.out.println(exception.getMessage());
         }
 
         System.out.println("\nПроверка ArrayIndexOutOfBoundsException");
@@ -29,7 +29,7 @@ public class Main {
 
             System.out.println(numbers[5]);
 
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException exception) {
             System.out.println(
                     "Попытка обращения к несуществующему элементу массива"
             );
