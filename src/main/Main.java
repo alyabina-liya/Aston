@@ -10,9 +10,9 @@ public class Main {
         CompareNumbers compare = new CompareNumbers();
 
         System.out.println("Сумма: " + calculator.sum(5, 5));
-        System.out.println("Разность: " + calculator.subtract(10, 5));
+        System.out.println("Вычитание: " + calculator.subtract(10, 5));
         System.out.println("Произведение: " + calculator.multiply(5, 5));
-        System.out.println("Частное: " + calculator.divide(10, 5));
+        System.out.println("Деление: " + calculator.divide(10, 5));
 
         System.out.println("Факториал: " + factorial.factorial(5));
 
