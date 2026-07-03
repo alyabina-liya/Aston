@@ -17,20 +17,14 @@ public class PaymentPage {
         switchToFrame();
     }
 
-    // ===== iframe =====
-
     private final By iframe =
             By.cssSelector("iframe.payment-widget-iframe");
-
-    // ===== сумма и телефон =====
 
     private final By amount =
             By.cssSelector("span.ng-star-inserted");
 
     private final By phone =
             By.cssSelector(".pay-description__text, .pay-description");
-
-    // ===== поля карты =====
 
     private final By cardNumber =
             By.id("cc-number");
@@ -44,8 +38,6 @@ public class PaymentPage {
     private final By cardHolder =
             By.cssSelector("input[formcontrolname='holder']");
 
-    // ===== подписи =====
-
     private final By cardNumberLabel =
             By.xpath("//label[contains(text(),'Номер карты')]");
 
@@ -58,17 +50,11 @@ public class PaymentPage {
     private final By cardHolderLabel =
             By.xpath("//label[contains(text(),'Имя и фамилия')]");
 
-    // ===== кнопка =====
-
     private final By payButton =
             By.cssSelector("button[type='submit'] span");
 
-    // ===== логотипы платежных систем =====
-
     private final By paymentSystems =
             By.cssSelector(".cards-brands img");
-
-    // ======================================================
 
     private void switchToFrame() {
 

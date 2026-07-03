@@ -14,8 +14,6 @@ public class MainPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
-    // ===== Locators =====
-
     private final By title = By.cssSelector(".pay__wrapper h2");
     private final By logos = By.cssSelector(".pay__partners img");
     private final By moreLink = By.linkText("Подробнее о сервисе");
@@ -31,8 +29,6 @@ public class MainPage {
     private final By email = By.cssSelector(".pay-form.opened input.email");
 
     private final By continueButton = By.cssSelector(".pay-form.opened button");
-
-    // ===== Methods =====
 
     public String getTitle() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(title))

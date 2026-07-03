@@ -74,17 +74,14 @@ public class PaymentBlockTest {
 
         PaymentPage paymentPage = new PaymentPage(driver);
 
-        // сумма
         Assertions.assertTrue(
                 paymentPage.getAmount().contains("10")
         );
 
-        // телефон
         Assertions.assertTrue(
                 paymentPage.getPhone().contains("297777777")
         );
 
-        // подписи полей
         Assertions.assertEquals(
                 "Номер карты",
                 paymentPage.getCardNumberLabel()
@@ -105,18 +102,15 @@ public class PaymentBlockTest {
                 paymentPage.getCardHolderLabel()
         );
 
-        // placeholder даты
         Assertions.assertEquals(
                 "ММ / ГГ",
                 paymentPage.getCardDatePlaceholder()
         );
 
-        // кнопка оплаты
         Assertions.assertTrue(
                 paymentPage.getPayButtonText().contains("10")
         );
 
-        // иконки платежных систем
         Assertions.assertTrue(
                 paymentPage.getPaymentSystemsCount() >= 4
         );
