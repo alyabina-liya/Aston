@@ -1,78 +1,131 @@
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.*;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
-import java.util.List;
 
 public class PaymentBlockTest {
 
     private WebDriver driver;
-    private WebDriverWait wait;
+    private MainPage mainPage;
 
     @BeforeEach
     public void setUp() {
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.manage().window().maximize();
+        driver.get("https://www.mts.by/");
+
+        mainPage = new MainPage(driver);
+        mainPage.closeCookie();
     }
 
     @Test
-    public void testPaymentForm() {
-
-        driver.get("https://www.mts.by/");
-
-        WebElement title = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(PaymentPage.TITLE)
-        );
+    public void testPaymentBlock() {
 
         Assertions.assertTrue(
-                title.getText().toLowerCase().contains("онлайн пополнение"),
-                "Неверный заголовок"
+                mainPage.getTitle().toLowerCase().contains("онлайн пополнение")
         );
 
-        try {
-            WebElement cookieBtn = wait.until(
-                    ExpectedConditions.elementToBeClickable(PaymentPage.COOKIE_BUTTON)
-            );
-            cookieBtn.click();
+        Assertions.assertEquals(5, mainPage.getLogoCount());
 
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.cssSelector(".cookie")
-            ));
-        } catch (Exception ignored) {}
+        mainPage.clickMoreLink();
 
-        List<WebElement> logos = driver.findElements(PaymentPage.LOGOS);
+        Assertions.assertTrue(
+                driver.getCurrentUrl().contains("poryadok-oplaty")
+        );
+    }
 
-        Assertions.assertFalse(logos.isEmpty(), "Логотипы не найдены");
-        Assertions.assertEquals(5, logos.size(), "Неверное количество логотипов");
+    @Test
+    public void testPlaceholders() {
 
-        WebElement link = wait.until(
-                ExpectedConditions.elementToBeClickable(PaymentPage.LINK_MORE)
+        mainPage.selectPaymentType("Услуги связи");
+        Assertions.assertEquals(
+                "Номер телефона",
+                mainPage.getPhonePlaceholder()
         );
 
-        link.click();
+        mainPage.selectPaymentType("Домашний интернет");
+        Assertions.assertEquals(
+                "Номер абонента",
+                mainPage.getPhonePlaceholder()
+        );
 
-        wait.until(ExpectedConditions.urlContains("poryadok-oplaty"));
+        mainPage.selectPaymentType("Рассрочка");
+        Assertions.assertEquals(
+                "Номер счета на 44",
+                mainPage.getPhonePlaceholder()
+        );
 
-        driver.navigate().back();
+        mainPage.selectPaymentType("Задолженность");
+        Assertions.assertEquals(
+                "Номер счета на 2073",
+                mainPage.getPhonePlaceholder()
+        );
+    }
 
-        driver.findElement(By.xpath("//span[text()='Услуги связи']")).click();
+    @Test
+    public void testContinueButton() {
 
-        wait.until(ExpectedConditions.elementToBeClickable(PaymentPage.PHONE))
-                .sendKeys("297777777");
+        mainPage.selectPaymentType("Услуги связи");
 
-        driver.findElement(PaymentPage.SUM).sendKeys("10");
+        mainPage.enterPhone("297777777");
+        mainPage.enterSum("10");
+        mainPage.enterEmail("test@test.com");
 
-        driver.findElement(PaymentPage.CONTINUE_BUTTON).click();
+        mainPage.clickContinue();
 
-        Assertions.assertTrue(true, "Форма отправлена");
+        PaymentPage paymentPage = new PaymentPage(driver);
+
+        // сумма
+        Assertions.assertTrue(
+                paymentPage.getAmount().contains("10")
+        );
+
+        // телефон
+        Assertions.assertTrue(
+                paymentPage.getPhone().contains("297777777")
+        );
+
+        // подписи полей
+        Assertions.assertEquals(
+                "Номер карты",
+                paymentPage.getCardNumberLabel()
+        );
+
+        Assertions.assertEquals(
+                "Срок действия",
+                paymentPage.getCardDateLabel()
+        );
+
+        Assertions.assertEquals(
+                "CVC",
+                paymentPage.getCardCvcLabel()
+        );
+
+        Assertions.assertEquals(
+                "Имя и фамилия на карте",
+                paymentPage.getCardHolderLabel()
+        );
+
+        // placeholder даты
+        Assertions.assertEquals(
+                "ММ / ГГ",
+                paymentPage.getCardDatePlaceholder()
+        );
+
+        // кнопка оплаты
+        Assertions.assertTrue(
+                paymentPage.getPayButtonText().contains("10")
+        );
+
+        // иконки платежных систем
+        Assertions.assertTrue(
+                paymentPage.getPaymentSystemsCount() >= 4
+        );
     }
 
     @AfterEach
     public void tearDown() {
-        if (driver != null) driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }

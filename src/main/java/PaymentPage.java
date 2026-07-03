@@ -1,15 +1,124 @@
-import org.openqa.selenium.By;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
 
 public class PaymentPage {
 
-    public static final By TITLE = By.cssSelector(".pay__wrapper h2");
-    public static final By LOGOS = By.cssSelector(".pay__partners img");
-    public static final By LINK_MORE = By.linkText("Подробнее о сервисе");
-    public static final By COOKIE = By.cssSelector(".cookie, .cookie.show");
-    public static final By PHONE = By.id("connection-phone");
-    public static final By SUM = By.id("connection-sum");
-    public static final By CONTINUE_BUTTON =
-            By.cssSelector("#pay-connection button.button__default");
-    public static final By COOKIE_BUTTON =
-            By.xpath("//button[contains(text(),'Принять') or contains(text(),'Согласен') or contains(text(),'Accept')]");
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+
+    public PaymentPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+        switchToFrame();
+    }
+
+    // ===== iframe =====
+
+    private final By iframe =
+            By.cssSelector("iframe.payment-widget-iframe");
+
+    // ===== сумма и телефон =====
+
+    private final By amount =
+            By.cssSelector("span.ng-star-inserted");
+
+    private final By phone =
+            By.cssSelector(".pay-description__text, .pay-description");
+
+    // ===== поля карты =====
+
+    private final By cardNumber =
+            By.id("cc-number");
+
+    private final By cardDate =
+            By.cssSelector("input[formcontrolname='expirationDate']");
+
+    private final By cardCvc =
+            By.cssSelector("input[formcontrolname='cvc']");
+
+    private final By cardHolder =
+            By.cssSelector("input[formcontrolname='holder']");
+
+    // ===== подписи =====
+
+    private final By cardNumberLabel =
+            By.xpath("//label[contains(text(),'Номер карты')]");
+
+    private final By cardDateLabel =
+            By.xpath("//label[contains(text(),'Срок действия')]");
+
+    private final By cardCvcLabel =
+            By.xpath("//label[contains(text(),'CVC')]");
+
+    private final By cardHolderLabel =
+            By.xpath("//label[contains(text(),'Имя и фамилия')]");
+
+    // ===== кнопка =====
+
+    private final By payButton =
+            By.cssSelector("button[type='submit'] span");
+
+    // ===== логотипы платежных систем =====
+
+    private final By paymentSystems =
+            By.cssSelector(".cards-brands img");
+
+    // ======================================================
+
+    private void switchToFrame() {
+
+        WebElement frame = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(iframe));
+
+        driver.switchTo().frame(frame);
+    }
+
+    public String getAmount() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(amount))
+                .getText();
+    }
+
+    public String getPhone() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(phone))
+                .getText();
+    }
+
+    public String getCardNumberLabel() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cardNumberLabel))
+                .getText();
+    }
+
+    public String getCardDateLabel() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cardDateLabel))
+                .getText();
+    }
+
+    public String getCardCvcLabel() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cardCvcLabel))
+                .getText();
+    }
+
+    public String getCardHolderLabel() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(cardHolderLabel))
+                .getText();
+    }
+
+    public String getCardDatePlaceholder() {
+        return driver.findElement(cardDate).getAttribute("placeholder");
+    }
+
+    public String getPayButtonText() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(payButton))
+                .getText();
+    }
+
+    public int getPaymentSystemsCount() {
+        List<WebElement> systems = driver.findElements(paymentSystems);
+        return systems.size();
+    }
 }
