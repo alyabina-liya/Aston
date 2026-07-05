@@ -3,6 +3,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import io.qameta.allure.Step;
 
 public class MainPage {
 
@@ -30,6 +31,7 @@ public class MainPage {
 
     private final By continueButton = By.cssSelector(".pay-form.opened button");
 
+    @Step("Получить заголовок блока оплаты")
     public String getTitle() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(title))
                 .getText()
@@ -37,6 +39,7 @@ public class MainPage {
                 .trim();
     }
 
+    @Step("Закрыть окно cookies")
     public void closeCookie() {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(cookieButton)).click();
@@ -44,14 +47,17 @@ public class MainPage {
         }
     }
 
+    @Step("Получить количество логотипов платежных систем")
     public int getLogoCount() {
         return driver.findElements(logos).size();
     }
 
+    @Step("Нажать ссылку 'Подробнее о сервисе'")
     public void clickMoreLink() {
         wait.until(ExpectedConditions.elementToBeClickable(moreLink)).click();
     }
 
+    @Step("Выбрать тип оплаты: {type}")
     public void selectPaymentType(String type) {
 
         wait.until(ExpectedConditions.elementToBeClickable(selectHeader)).click();
@@ -75,11 +81,13 @@ public class MainPage {
         );
     }
 
+    @Step("Получить плейсхолдер поля телефона")
     public String getPhonePlaceholder() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(phone))
                 .getAttribute("placeholder");
     }
 
+    @Step("Ввести номер телефона: {value}")
     public void enterPhone(String value) {
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(phone)
@@ -88,6 +96,7 @@ public class MainPage {
         element.sendKeys(value);
     }
 
+    @Step("Ввести сумму: {value}")
     public void enterSum(String value) {
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(sum)
@@ -96,6 +105,7 @@ public class MainPage {
         element.sendKeys(value);
     }
 
+    @Step("Ввести e-mail: {value}")
     public void enterEmail(String value) {
         WebElement element = wait.until(
                 ExpectedConditions.visibilityOfElementLocated(email)
@@ -104,6 +114,7 @@ public class MainPage {
         element.sendKeys(value);
     }
 
+    @Step("Нажать кнопку 'Продолжить'")
     public void clickContinue() {
         wait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
     }

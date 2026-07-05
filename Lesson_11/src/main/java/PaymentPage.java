@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -64,45 +65,54 @@ public class PaymentPage {
         driver.switchTo().frame(frame);
     }
 
+    @Step("Получить сумму платежа")
     public String getAmount() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(amount))
                 .getText();
     }
 
+    @Step("Получить номер телефона")
     public String getPhone() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(phone))
                 .getText();
     }
 
+    @Step("Получить надпись поля 'Номер карты'")
     public String getCardNumberLabel() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cardNumberLabel))
                 .getText();
     }
 
+    @Step("Получить надпись поля 'Срок действия'")
     public String getCardDateLabel() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cardDateLabel))
                 .getText();
     }
 
+    @Step("Получить надпись поля 'CVC'")
     public String getCardCvcLabel() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cardCvcLabel))
                 .getText();
     }
 
+    @Step("Получить надпись поля 'Имя и фамилия на карте'")
     public String getCardHolderLabel() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(cardHolderLabel))
                 .getText();
     }
 
+    @Step("Получить плейсхолдер поля даты карты")
     public String getCardDatePlaceholder() {
         return driver.findElement(cardDate).getAttribute("placeholder");
     }
 
+    @Step("Получить текст кнопки оплаты")
     public String getPayButtonText() {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(payButton))
                 .getText();
     }
 
+    @Step("Получить количество иконок платежных систем")
     public int getPaymentSystemsCount() {
         List<WebElement> systems = driver.findElements(paymentSystems);
         return systems.size();
